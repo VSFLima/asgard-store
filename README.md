@@ -1,4 +1,4 @@
-# 🎮 GameVault
+# 🎮 Asgard Store
 
 Marketplace para compra e venda de contas de jogos e creditos.
 
