@@ -93,7 +93,7 @@ require_once __DIR__ . '/../includes/header.php';
             <?php if (count($screenshots) > 1): ?>
             <div class="gallery-thumbs">
                 <?php foreach ($screenshots as $i => $img): ?>
-                <div class="gallery-thumb <?php echo $i === 0 ? 'active' : ''; ?>" onclick="changeImage(this, '/assets/img/uploads/anuncios/<?php echo sanitize($img); ?>')">
+                <div class="gallery-thumb <?php echo $i === 0 ? 'active' : ''; ?>" >
                     <img src="/assets/img/uploads/anuncios/<?php echo sanitize($img); ?>" alt="Screenshot <?php echo $i + 1; ?>">
                 </div>
                 <?php endforeach; ?>
