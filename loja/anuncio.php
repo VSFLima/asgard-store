@@ -164,7 +164,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <i class="fas fa-shopping-cart"></i> Comprar Agora
                 </a>
                 <button class="btn btn-outline btn-favorite <?php echo $is_favorite ? 'active' : ''; ?>" 
-                        data-id="<?php echo $id; ?>" onclick="toggleFavorite(this)">
+                        data-id="<?php echo $id; ?>" >
                     <i class="<?php echo $is_favorite ? 'fas' : 'far'; ?> fa-heart"></i>
                 </button>
             </div>
