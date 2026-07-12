@@ -7,9 +7,6 @@ $page_title = 'Gerenciar Redes Sociais';
 require_once __DIR__ . '/../includes/functions.php';
 require_admin();
 
-$success = '';
-$error = '';
-
 // Processar acoes
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_csrf();
@@ -19,7 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = intval($_POST['id'] ?? 0);
         $url = sanitize($_POST['url'] ?? '');
         $ativo = isset($_POST['ativo']) ? 1 : 0;
-        $ordem = intval($_POST['ordem'] ?? 0);
+        $ordem = max(0, intval($_POST['ordem'] ?? 0));
+        
+        // Validacao de URL
+        if (!empty($url) && !filter_var($url, FILTER_VALIDATE_URL)) {
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'URL invalida para a rede social.'];
+            header('Location: /admin/redes_sociais.php');
+            exit;
+        }
         
         if ($id > 0) {
             db_update('redes_sociais', [
@@ -27,9 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'ativo' => $ativo,
                 'ordem' => $ordem
             ], 'id = ?', [$id]);
-            $success = 'Rede social atualizada com sucesso!';
+            
+            // Log de auditoria
+            $rede = db_fetch("SELECT nome FROM redes_sociais WHERE id = ?", [$id]);
+            db_insert('admin_log', [
+                'admin_id' => $_SESSION['user_id'],
+                'acao' => 'Atualizar rede social',
+                'descricao' => 'Rede: ' . ($rede['nome'] ?? 'ID ' . $id) . ' | Status: ' . ($ativo ? 'Ativo' : 'Inativo'),
+                'tipo' => 'config'
+            ]);
+            
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Rede social atualizada com sucesso!'];
         }
     }
+    header('Location: /admin/redes_sociais.php');
+    exit;
 }
 
 // Buscar redes sociais
@@ -43,13 +59,6 @@ require_once __DIR__ . '/../includes/header.php';
         <h1 class="section-title">Redes Sociais</h1>
         <a href="/admin/" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Voltar</a>
     </div>
-    
-    <?php if ($success): ?>
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <?php echo $success; ?></div>
-    <?php endif; ?>
-    <?php if ($error): ?>
-        <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></div>
-    <?php endif; ?>
     
     <p style="color: var(--text-secondary); margin-bottom: 25px;">
         Configure as redes sociais exibidas no rodape do site. O admin pode ativar/desativar cada uma.
@@ -80,19 +89,19 @@ require_once __DIR__ . '/../includes/header.php';
                             <?php echo csrf_field(); ?>
                             <input type="hidden" name="acao" value="salvar">
                             <input type="hidden" name="id" value="<?php echo $rede['id']; ?>">
-                            <input type="url" name="url" class="form-input" value="<?php echo sanitize($rede['url']); ?>" placeholder="https://..." style="min-width: 250px;">
+                            <input type="url" name="url" class="form-input" value="<?php echo sanitize($rede['url']); ?>" placeholder="https://..." required style="min-width: 250px;">
                     </td>
                     <td>
-                        <input type="number" name="ordem" class="form-input" value="<?php echo $rede['ordem']; ?>" style="width: 60px; text-align: center;">
+                        <input type="number" name="ordem" class="form-input" value="<?php echo $rede['ordem']; ?>" min="0" style="width: 60px; text-align: center;">
                     </td>
                     <td>
                         <label class="checkbox-label">
                             <input type="checkbox" name="ativo" value="1" <?php echo $rede['ativo'] ? 'checked' : ''; ?> style="width: auto;">
-                            <span><?php echo $rede['ativo'] ? 'Ativo' : 'Inativo'; ?></span>
+                            <span class="status-label"><?php echo $rede['ativo'] ? 'Ativo' : 'Inativo'; ?></span>
                         </label>
                     </td>
                     <td>
-                        <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i></button>
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Salvar</button>
                         </form>
                     </td>
                 </tr>
@@ -107,8 +116,19 @@ require_once __DIR__ . '/../includes/header.php';
             <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--neon-green); margin-right: 10px;"></i> As redes ativas aparecem no rodape do site</li>
             <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--neon-green); margin-right: 10px;"></i> A ordem define a posicao de exibicao</li>
             <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--neon-green); margin-right: 10px;"></i> Desative uma rede para ocultar do site</li>
+            <li style="padding: 8px 0;"><i class="fas fa-check" style="color: var(--neon-green); margin-right: 10px;"></i> Todas as alteracoes sao registradas no log de auditoria</li>
         </ul>
     </div>
 </div>
+
+<script>
+// Toggle status label dynamically
+document.querySelectorAll('input[name="ativo"]').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+        var label = this.closest('.checkbox-label').querySelector('.status-label');
+        label.textContent = this.checked ? 'Ativo' : 'Inativo';
+    });
+});
+</script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
