@@ -384,3 +384,51 @@ INSERT INTO `creditos` (`jogo_id`, `nome`, `descricao`, `quantidade`, `moeda_jog
 (3, '4.500 Robux', 'Pacote premium', 4500, 'Robux', 195.00, 0, 195.00, 100, 6);
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ============================================
+-- Tabela de Destaque Premium (Anuncios Pagos)
+-- ============================================
+CREATE TABLE IF NOT EXISTS `destaques_premium` (
+  `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `anuncio_id` INT UNSIGNED NOT NULL,
+  `usuario_id` INT UNSIGNED NOT NULL,
+  `valor_pago` DECIMAL(10,2) NOT NULL,
+  `duracao_dias` INT NOT NULL DEFAULT 7,
+  `data_inicio` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `data_fim` DATETIME NOT NULL,
+  `status` ENUM('pendente','ativo','expirado','cancelado') DEFAULT 'pendente',
+  `metodo_pagamento` ENUM('pix','crypto','saldo'),
+  `criado_em` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`anuncio_id`) REFERENCES `anuncios`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- Tabela de Redes Sociais do Site
+-- ============================================
+CREATE TABLE IF NOT EXISTS `redes_sociais` (
+  `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `nome` VARCHAR(50) NOT NULL,
+  `slug` VARCHAR(50) NOT NULL UNIQUE,
+  `icone` VARCHAR(50),
+  `cor` VARCHAR(7),
+  `url` VARCHAR(255),
+  `ativo` TINYINT(1) DEFAULT 1,
+  `ordem` INT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Redes sociais padrao
+INSERT INTO `redes_sociais` (`nome`, `slug`, `icone`, `cor`, `url`, `ativo`, `ordem`) VALUES
+('Telegram', 'telegram', 'fab fa-telegram', '#0088CC', '#', 1, 1),
+('TikTok', 'tiktok', 'fab fa-tiktok', '#000000', '#', 1, 2),
+('WhatsApp', 'whatsapp', 'fab fa-whatsapp', '#25D366', '#', 1, 3),
+('Discord', 'discord', 'fab fa-discord', '#5865F2', '#', 1, 4),
+('Instagram', 'instagram', 'fab fa-instagram', '#E4405F', '#', 1, 5),
+('YouTube', 'youtube', 'fab fa-youtube', '#FF0000', '#', 1, 6);
+
+-- Configuracoes de preco de destaque
+INSERT INTO `configuracoes` (`chave`, `valor`, `descricao`) VALUES
+('destaque_preco_7dias', '9.99', 'Preco do destaque por 7 dias'),
+('destaque_preco_14dias', '14.99', 'Preco do destaque por 14 dias'),
+('destaque_preco_30dias', '19.99', 'Preco do destaque por 30 dias'),
+('redes_sociais_ativas', '1', 'Mostrar redes sociais no site');

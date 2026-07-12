@@ -11,10 +11,15 @@
                     </div>
                     <p class="footer-desc">O melhor marketplace para compra e venda de contas e creditos de jogos.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-telegram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <?php
+                        $redes = db_fetch_all("SELECT * FROM redes_sociais WHERE ativo = 1 ORDER BY ordem ASC");
+                        foreach ($redes as $rede): ?>
+                        <a href="<?php echo sanitize($rede['url']); ?>" target="_blank" 
+                           data-tooltip="<?php echo sanitize($rede['nome']); ?>"
+                           style="<?php echo $rede['cor'] ? '--hover-color: ' . $rede['cor'] : ''; ?>">
+                            <i class="<?php echo sanitize($rede['icone']); ?>"></i>
+                        </a>
+                        <?php endforeach; ?>
                     </div>
                 </div>
                 <div class="footer-col">
