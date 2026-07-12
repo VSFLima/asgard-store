@@ -41,11 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$destaque_ativo) {
     $metodo = $_POST['metodo_pagamento'] ?? 'saldo';
     
     // Definir preco
-    $valor = match($duracao) {
-        7 => $preco_7,
-        14 => $preco_14,
-        30 => $preco_30,
-        default => $preco_7
+    switch($duracao) {
+        case 14: $valor = $preco_14; break;
+        case 30: $valor = $preco_30; break;
+        default: $valor = $preco_7;
     };
     
     // Verificar saldo
@@ -55,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$destaque_ativo) {
             $error = 'Saldo insuficiente. Voce tem ' . format_money($user['saldo']);
         } else {
             // Debitar saldo
-db_update('usuarios', ['saldo' => $user['saldo'] - $valor], 'id = ?', [$user_id]);
+db_query("UPDATE usuarios SET saldo = saldo - ? WHERE id = ? AND saldo >= ?", [$valor, $user_id, $valor]);], 'id = ?', [$user_id]);
             
             // Criar destaque
             $data_fim = date('Y-m-d H:i:s', strtotime("+{$duracao} days"));

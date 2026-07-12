@@ -12,7 +12,10 @@
                     <p class="footer-desc">O melhor marketplace para compra e venda de contas e creditos de jogos.</p>
                     <div class="social-links">
                         <?php
-                        $redes = db_fetch_all("SELECT * FROM redes_sociais WHERE ativo = 1 ORDER BY ordem ASC");
+                        // Verificar se redes sociais estao ativas
+$redes_ativas = db_fetch("SELECT valor FROM configuracoes WHERE chave = 'redes_sociais_ativas'");
+if ($redes_ativas && $redes_ativas['valor'] == '1'):
+$redes = db_fetch_all("SELECT * FROM redes_sociais WHERE ativo = 1 ORDER BY ordem ASC");
                         foreach ($redes as $rede): ?>
                         <a href="<?php echo sanitize($rede['url']); ?>" target="_blank" 
                            data-tooltip="<?php echo sanitize($rede['nome']); ?>"
