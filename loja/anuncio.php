@@ -234,6 +234,36 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     </section>
     <?php endif; ?>
+            <!-- Redes Sociais do Vendedor -->
+            <?php
+            $redes_vendedor = [
+                ['key' => 'telegram_link', 'icon' => 'fab fa-telegram', 'color' => '#0088CC', 'label' => 'Telegram'],
+                ['key' => 'whatsapp_link', 'icon' => 'fab fa-whatsapp', 'color' => '#25D366', 'label' => 'WhatsApp'],
+                ['key' => 'tiktok_link', 'icon' => 'fab fa-tiktok', 'color' => '#FFFFFF', 'label' => 'TikTok'],
+                ['key' => 'instagram_link', 'icon' => 'fab fa-instagram', 'color' => '#E4405F', 'label' => 'Instagram'],
+                ['key' => 'youtube_link', 'icon' => 'fab fa-youtube', 'color' => '#FF0000', 'label' => 'YouTube'],
+                ['key' => 'discord_link', 'icon' => 'fab fa-discord', 'color' => '#5865F2', 'label' => 'Discord'],
+            ];
+            $tem_rede = false;
+            foreach ($redes_vendedor as $rv) {
+                if (!empty($anuncio[$rv['key']])) $tem_rede = true;
+            }
+            if ($tem_rede):
+            ?>
+            <div class="seller-social">
+                <h4><i class="fas fa-share-alt"></i> Contatar Vendedor</h4>
+                <div class="seller-social-links">
+                    <?php foreach ($redes_vendedor as $rv):
+                        if (!empty($anuncio[$rv['key']])):
+                    ?>
+                    <a href="<?php echo sanitize($anuncio[$rv['key']]); ?>" target="_blank" rel="noopener noreferrer" class="social-btn" style="--btn-color: <?php echo $rv['color']; ?>">
+                        <i class="<?php echo $rv['icon']; ?>"></i>
+                        <span><?php echo $rv['label']; ?></span>
+                    </a>
+                    <?php endif; endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
 </div>
 
 
