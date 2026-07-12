@@ -1,56 +1,50 @@
 <?php
 /**
- * Asgard Store - Painel: Meus Anúncios
- * Lista de anúncios do usuário com opções de editar/excluir
+ * Asgard Store - Painel: Meus Anuncios
  */
 
-$page_title = 'Meus Anúncios';
+$page_title = 'Meus Anuncios';
 require_once __DIR__ . '/../includes/functions.php';
 require_login();
 
 $user_id = $_SESSION['user_id'];
 
-// ============================================
-// PROCESSAR AÇÕES
-// ============================================
-
+// Processar acoes
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_csrf();
     $acao = $_POST['acao'] ?? '';
     $anuncio_id = intval($_POST['anuncio_id'] ?? 0);
 
     if ($anuncio_id > 0) {
-        // Verificar se o anúncio pertence ao usuário
+        // Verificar se o anuncio pertence ao usuario
         $anuncio = db_fetch("SELECT * FROM anuncios WHERE id = ? AND usuario_id = ?", [$anuncio_id, $user_id]);
 
         if ($anuncio) {
             switch ($acao) {
                 case 'excluir':
-                    // Só pode excluir se estiver pendente ou reprovado
+                    // So pode excluir se estiver pendente ou reprovado
                     if (in_array($anuncio['status'], ['pendente', 'reprovado'])) {
-                        db_delete('anuncios', 'id = ?', [$anuncio_id]);
-                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anúncio excluído com sucesso!'];
+                        db_query("DELETE FROM anuncios WHERE id = ?", [$anuncio_id]);
+                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anuncio excluido com sucesso!'];
                     } else {
-                        $_SESSION['flash'] = ['type' => 'error', 'message' => 'Não é possível excluir anúncio com status "' . $anuncio['status'] . '"'];
+                        $_SESSION['flash'] = ['type' => 'error', 'message' => 'Nao e possivel excluir este anuncio.'];
                     }
                     break;
 
                 case 'pausar':
                     if ($anuncio['status'] === 'aprovado') {
-                        db_update('anuncios', ['status' => 'pendente'], 'id = ?', [$anuncio_id]);
-                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anúncio pausado com sucesso!'];
+                        db_query("UPDATE anuncios SET status = 'pendente' WHERE id = ?", [$anuncio_id]);
+                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anuncio pausado com sucesso!'];
                     }
                     break;
 
                 case 'reativar':
                     if ($anuncio['status'] === 'pendente') {
-                        db_update('anuncios', ['status' => 'aprovado'], 'id = ?', [$anuncio_id]);
-                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anúncio reativado!'];
+                        db_query("UPDATE anuncios SET status = 'aprovado' WHERE id = ?", [$anuncio_id]);
+                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anuncio reativado com sucesso!'];
                     }
                     break;
             }
-        } else {
-            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Anúncio não encontrado ou não pertence a você.'];
         }
     }
 
@@ -58,18 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// ============================================
-// PARÂMETROS
-// ============================================
-
+// Filtros
 $filtro_status = $_GET['status'] ?? '';
 $page = max(1, intval($_GET['page'] ?? 1));
 $per_page = 10;
 
-// ============================================
-// CONSTRUIR QUERY
-// ============================================
-
+// Query
 $where = ["a.usuario_id = ?"];
 $params = [$user_id];
 
@@ -80,15 +68,16 @@ if ($filtro_status !== '' && in_array($filtro_status, ['pendente', 'aprovado', '
 
 $where_sql = implode(' AND ', $where);
 
-// Contar total
+// Total
 $total = db_fetch("SELECT COUNT(*) as total FROM anuncios a WHERE {$where_sql}", $params)['total'];
 
-// Paginação
+// Paginacao
 $pagination = paginate($total, $per_page, $page);
 
-// Buscar anúncios
+// Buscar anuncios
 $anuncios = db_fetch_all("
-    SELECT a.*, j.nome as jogo_nome, j.icone as jogo_icone, j.slug as jogo_slug
+    SELECT a.*, j.nome as jogo_nome, j.icone as jogo_icone, j.slug as jogo_slug,
+           (SELECT COUNT(*) FROM compras WHERE anuncio_id = a.id AND status IN ('concluido', 'entregue')) as total_vendas
     FROM anuncios a
     JOIN jogos j ON a.jogo_id = j.id
     WHERE {$where_sql}
@@ -96,7 +85,7 @@ $anuncios = db_fetch_all("
     LIMIT {$pagination['per_page']} OFFSET {$pagination['offset']}
 ", $params);
 
-// Estatísticas do usuário
+// Estatisticas
 $stats = [
     'total' => db_count('anuncios', "usuario_id = ?", [$user_id]),
     'aprovados' => db_count('anuncios', "usuario_id = ? AND status = 'aprovado'", [$user_id]),
@@ -105,36 +94,26 @@ $stats = [
     'vendidos' => db_count('anuncios', "usuario_id = ? AND status = 'vendido'", [$user_id]),
 ];
 
-// Verificar se pode criar mais anúncios
-$limite_anuncios = 20;
-$pode_criar = $stats['total'] < $limite_anuncios;
-
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="container" style="padding-top: 30px; padding-bottom: 60px;">
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
-        <a href="/">Início</a> <i class="fas fa-chevron-right"></i>
+        <a href="/">Inicio</a> <i class="fas fa-chevron-right"></i>
         <a href="/painel/">Painel</a> <i class="fas fa-chevron-right"></i>
-        <span>Meus Anúncios</span>
+        <span>Meus Anuncios</span>
     </nav>
 
     <!-- Header -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h1 class="section-title">Meus Anúncios</h1>
-        <?php if ($pode_criar): ?>
+        <h1 class="section-title">Meus Anuncios</h1>
         <a href="/painel/anuncio-novo.php" class="btn btn-green">
-            <i class="fas fa-plus"></i> Novo Anúncio
+            <i class="fas fa-plus"></i> Novo Anuncio
         </a>
-        <?php else: ?>
-        <span class="btn btn-outline" style="opacity: 0.5; cursor: not-allowed;">
-            <i class="fas fa-plus"></i> Limite Atingido
-        </span>
-        <?php endif; ?>
     </div>
 
-    <!-- Estatísticas -->
+    <!-- Estatisticas -->
     <div class="user-ads-stats">
         <div class="ads-stat-card">
             <i class="fas fa-tags"></i>
@@ -192,21 +171,19 @@ require_once __DIR__ . '/../includes/header.php';
         </a>
     </div>
 
-    <!-- Lista de Anúncios -->
+    <!-- Lista de Anuncios -->
     <?php if (empty($anuncios)): ?>
-    <div class="panel-empty" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 60px 20px; text-align: center;">
-        <i class="fas fa-inbox" style="font-size: 3rem; color: var(--text-secondary); opacity: 0.3; display: block; margin-bottom: 15px;"></i>
-        <h3 style="color: var(--text-secondary); margin-bottom: 10px;">
-            <?php echo $filtro_status ? 'Nenhum anúncio com este status' : 'Você ainda não tem anúncios'; ?>
-        </h3>
-        <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.9rem;">
-            <?php echo $filtro_status ? 'Tente filtrar por outro status.' : 'Comece criando seu primeiro anúncio!'; ?>
+    <div class="empty-state" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 60px 20px;">
+        <div class="empty-state-icon"><i class="fas fa-inbox"></i></div>
+        <h3 class="empty-state-title">Nenhum anuncio encontrado</h3>
+        <p class="empty-state-desc">
+            <?php if ($filtro_status): ?>
+                Nenhum anuncio com este status. <a href="/painel/anuncios.php">Ver todos</a>
+            <?php else: ?>
+                Comece criando seu primeiro anuncio!
+            <?php endif; ?>
         </p>
-        <?php if (!$filtro_status && $pode_criar): ?>
-        <a href="/painel/anuncio-novo.php" class="btn btn-green">
-            <i class="fas fa-plus"></i> Criar Primeiro Anúncio
-        </a>
-        <?php endif; ?>
+        <a href="/painel/anuncio-novo.php" class="btn btn-green"><i class="fas fa-plus"></i> Criar Anuncio</a>
     </div>
     <?php else: ?>
     <div class="ads-list">
@@ -232,6 +209,9 @@ require_once __DIR__ . '/../includes/header.php';
                     echo $status_labels[$anuncio['status']] ?? $anuncio['status'];
                     ?>
                 </span>
+                <?php if (!empty($anuncio['destaque'])): ?>
+                <span class="ad-destaque-badge">⭐ Destaque</span>
+                <?php endif; ?>
             </div>
 
             <!-- Info -->
@@ -240,7 +220,9 @@ require_once __DIR__ . '/../includes/header.php';
                     <img src="/assets/img/games/<?php echo sanitize($anuncio['jogo_icone'] ?? 'default-game.png'); ?>" alt="" onerror="this.style.display='none'">
                     <?php echo sanitize($anuncio['jogo_nome']); ?>
                 </div>
-                <h3 class="ad-title"><?php echo sanitize($anuncio['titulo']); ?></h3>
+                <h3 class="ad-title">
+                    <a href="/loja/anuncio.php?id=<?php echo $anuncio['id']; ?>"><?php echo sanitize($anuncio['titulo']); ?></a>
+                </h3>
                 <div class="ad-meta">
                     <span><i class="fas fa-eye"></i> <?php echo $anuncio['visualizacoes']; ?></span>
                     <span><i class="fas fa-clock"></i> <?php echo time_ago($anuncio['criado_em']); ?></span>
@@ -251,13 +233,13 @@ require_once __DIR__ . '/../includes/header.php';
                 <?php if ($anuncio['status'] === 'reprovado' && !empty($anuncio['motivo_reprovacao'])): ?>
                 <div class="ad-rejection-reason">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <span><?php echo sanitize($anuncio['motivo_reprovacao']); ?></span>
+                    <?php echo sanitize($anuncio['motivo_reprovacao']); ?>
                 </div>
                 <?php endif; ?>
                 <div class="ad-price"><?php echo format_money($anuncio['preco']); ?></div>
             </div>
 
-            <!-- Ações -->
+            <!-- Acoes -->
             <div class="ad-actions">
                 <a href="/loja/anuncio.php?id=<?php echo $anuncio['id']; ?>" class="btn btn-sm btn-outline" title="Ver na loja">
                     <i class="fas fa-eye"></i>
@@ -267,7 +249,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <a href="/painel/anuncio-editar.php?id=<?php echo $anuncio['id']; ?>" class="btn btn-sm btn-primary" title="Editar">
                     <i class="fas fa-edit"></i>
                 </a>
-                <form method="POST" style="display: inline;" onsubmit="return confirm('Excluir este anúncio permanentemente?')">
+                <form method="POST" style="display: inline;" onsubmit="return confirm('Excluir este anuncio permanentemente?')">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="acao" value="excluir">
                     <input type="hidden" name="anuncio_id" value="<?php echo $anuncio['id']; ?>">
@@ -278,7 +260,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <?php endif; ?>
 
                 <?php if ($anuncio['status'] === 'aprovado'): ?>
-                <form method="POST" style="display: inline;" onsubmit="return confirm('Pausar este anúncio?')">
+                <form method="POST" style="display: inline;" onsubmit="return confirm('Pausar este anuncio?')">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="acao" value="pausar">
                     <input type="hidden" name="anuncio_id" value="<?php echo $anuncio['id']; ?>">
@@ -289,7 +271,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <?php endif; ?>
 
                 <?php if ($anuncio['status'] === 'pendente' && $anuncio['destaque']): ?>
-                <form method="POST" style="display: inline;" onsubmit="return confirm('Reativar este anúncio?')">
+                <form method="POST" style="display: inline;" onsubmit="return confirm('Reativar este anuncio?')">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="acao" value="reativar">
                     <input type="hidden" name="anuncio_id" value="<?php echo $anuncio['id']; ?>">
@@ -303,7 +285,7 @@ require_once __DIR__ . '/../includes/header.php';
         <?php endforeach; ?>
     </div>
 
-    <!-- Paginação -->
+    <!-- Paginacao -->
     <?php
     $base_url = '/painel/anuncios.php';
     $query_params = $_GET;
@@ -320,7 +302,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 <style>
 /* ============================================
-   MY ADS STYLES
+   MY ADS PAGE STYLES
    ============================================ */
 
 .user-ads-stats {
@@ -432,6 +414,7 @@ require_once __DIR__ . '/../includes/header.php';
     opacity: 0.7;
 }
 
+/* Ad Image */
 .ad-image {
     position: relative;
     width: 160px;
@@ -463,6 +446,19 @@ require_once __DIR__ . '/../includes/header.php';
 .ad-status-badge.status-reprovado { background: rgba(255,68,68,0.9); color: #fff; }
 .ad-status-badge.status-vendido { background: rgba(0,136,255,0.9); color: #fff; }
 
+.ad-destaque-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    background: rgba(255,200,0,0.9);
+    color: #000;
+}
+
+/* Ad Info */
 .ad-info {
     flex: 1;
     min-width: 0;
@@ -494,6 +490,15 @@ require_once __DIR__ . '/../includes/header.php';
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.ad-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ad-title a:hover {
+    color: var(--neon-green);
 }
 
 .ad-meta {
