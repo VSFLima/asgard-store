@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS `compras` (
   INDEX `idx_jogo_status` (`jogo_id`, `status`),
   INDEX `idx_comprador` (`comprador_id`),
   INDEX `idx_vendedor` (`vendedor_id`)
+  INDEX `idx_status_created` (`status`, `criado_em`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------

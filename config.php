@@ -22,7 +22,7 @@ ini_set('session.cookie_samesite', 'Lax');
 // ini_set('session.cookie_secure', 1);
 
 // Diretorios
-if (!defined('ROOT_PATH')) define('ROOT_PATH', dirname(__DIR__) . '/');
+if (!defined('ROOT_PATH')) define('ROOT_PATH', __DIR__ . '/');
 if (!defined('ASSETS_PATH')) define('ASSETS_PATH', ROOT_PATH . 'assets/');
 if (!defined('UPLOADS_PATH')) define('UPLOADS_PATH', ASSETS_PATH . 'img/uploads/');
 if (!defined('UPLOADS_ANUNCIOS')) define('UPLOADS_ANUNCIOS', UPLOADS_PATH . 'anuncios/');

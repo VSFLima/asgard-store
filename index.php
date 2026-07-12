@@ -110,7 +110,7 @@ $total_jogos = db_count('jogos', "ativo = 1");
     <div class="games-grid">
         <?php foreach ($jogos as $jogo): ?>
         <a href="/loja/?jogo=<?php echo $jogo['slug']; ?>" class="game-card">
-            <img src="/assets/img/games/<?php echo sanitize($jogo['icone'] ?? 'default-game.png'); ?>" 
+            <img loading="lazy" src="/assets/img/games/<?php echo sanitize($jogo['icone'] ?? 'default-game.png'); ?>" 
                  alt="<?php echo sanitize($jogo['nome']); ?>"
                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
             <div class="game-card-fallback" style="display:none; width:80px; height:80px; background:var(--bg-secondary); border-radius:50%; align-items:center; justify-content:center; margin:0 auto 15px;">
@@ -161,7 +161,7 @@ $total_jogos = db_count('jogos', "ativo = 1");
                 </div>
                 <div class="product-info">
                     <div class="product-game">
-                        <img src="/assets/img/games/<?php echo sanitize($anuncio['jogo_icone'] ?? 'default-game.png'); ?>" 
+                        <img loading="lazy" src="/assets/img/games/<?php echo sanitize($anuncio['jogo_icone'] ?? 'default-game.png'); ?>" 
                              alt="" onerror="this.style.display='none'">
                         <?php echo sanitize($anuncio['jogo_nome']); ?>
                     </div>
@@ -196,7 +196,7 @@ $total_jogos = db_count('jogos', "ativo = 1");
         <?php foreach ($creditos_populares as $credito): ?>
         <?php $jogo_info = $jogos_por_id[$credito['jogo_id']] ?? null; ?>
         <div class="credit-card">
-            <img src="/assets/img/moedas/<?php echo sanitize($credito['moeda_icone'] ?? 'default.png'); ?>" 
+            <img loading="lazy" src="/assets/img/moedas/<?php echo sanitize($credito['moeda_icone'] ?? 'default.png'); ?>" 
                  alt="<?php echo sanitize($credito['moeda_jogo']); ?>"
                  class="credit-icon"
                  onerror="this.style.display='none'">

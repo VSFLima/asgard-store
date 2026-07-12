@@ -68,6 +68,7 @@ function login_user(string $email, string $password): ?array {
         $_SESSION['user_nome'] = $user['nome'];
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_admin'] = $user['admin'];
+        session_regenerate_id(true);
         $_SESSION['logged_in'] = true;
         return $user;
     }
