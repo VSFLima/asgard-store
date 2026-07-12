@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `anuncios` (
   FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`jogo_id`) REFERENCES `jogos`(`id`) ON DELETE CASCADE,
   INDEX `idx_status` (`status`),
+  INDEX `idx_jogo_status` (`jogo_id`, `status`),
   INDEX `idx_jogo` (`jogo_id`),
   INDEX `idx_preco` (`preco`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -113,6 +114,7 @@ CREATE TABLE IF NOT EXISTS `compras` (
   FOREIGN KEY (`comprador_id`) REFERENCES `usuarios`(`id`),
   FOREIGN KEY (`vendedor_id`) REFERENCES `usuarios`(`id`),
   INDEX `idx_status` (`status`),
+  INDEX `idx_jogo_status` (`jogo_id`, `status`),
   INDEX `idx_comprador` (`comprador_id`),
   INDEX `idx_vendedor` (`vendedor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

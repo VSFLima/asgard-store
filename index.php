@@ -12,6 +12,12 @@ $jogos = db_fetch_all(
      FROM jogos j WHERE j.ativo = 1 ORDER BY j.ordem ASC"
 );
 
+// Criar array de jogos indexado por ID para facilitar busca
+$jogos_por_id = [];
+foreach ($jogos as $j) {
+    $jogos_por_id[$j['id']] = $j;
+}
+
 // Buscar anuncios aprovados em destaque
 $anuncios_destaque = db_fetch_all(
     "SELECT a.*, j.nome as jogo_nome, j.icone as jogo_icone, j.moeda_nome,
@@ -26,7 +32,7 @@ $anuncios_destaque = db_fetch_all(
 
 // Buscar creditos mais vendidos
 $creditos_populares = db_fetch_all(
-    "SELECT c.*, j.nome as jogo_nome, j.icone as jogo_icone
+    "SELECT c.*, j.nome as jogo_nome, j.icone as jogo_icone, j.moeda_icone
      FROM creditos c
      JOIN jogos j ON c.jogo_id = j.id
      WHERE c.ativo = 1 AND c.estoque > 0
@@ -104,9 +110,12 @@ $total_jogos = db_count('jogos', "ativo = 1");
     <div class="games-grid">
         <?php foreach ($jogos as $jogo): ?>
         <a href="/loja/?jogo=<?php echo $jogo['slug']; ?>" class="game-card">
-            <img src="/assets/img/games/<?php echo $jogo['icone']; ?>" 
+            <img src="/assets/img/games/<?php echo sanitize($jogo['icone'] ?? 'default-game.png'); ?>" 
                  alt="<?php echo sanitize($jogo['nome']); ?>"
-                 onerror="this.src='/assets/img/games/default-game.png'">
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="game-card-fallback" style="display:none; width:80px; height:80px; background:var(--bg-secondary); border-radius:50%; align-items:center; justify-content:center; margin:0 auto 15px;">
+                <i class="fas fa-gamepad" style="font-size:2rem; color:var(--neon-green);"></i>
+            </div>
             <div class="game-card-name"><?php echo sanitize($jogo['nome']); ?></div>
             <div class="game-card-count">
                 <i class="fas fa-tag"></i> <?php echo $jogo['total_anuncios']; ?> anuncios
@@ -140,16 +149,20 @@ $total_jogos = db_count('jogos', "ativo = 1");
                 <div class="product-image">
                     <?php 
                     $screenshots = json_decode($anuncio['screenshots'] ?? '[]', true);
-                    $img = !empty($screenshots[0]) ? '/assets/img/uploads/anuncios/' . $screenshots[0] : '/assets/img/games/' . ($anuncio['jogo_icone'] ?? 'default-game.png');
+                    $img = !empty($screenshots[0]) 
+                        ? '/assets/img/uploads/anuncios/' . $screenshots[0] 
+                        : '/assets/img/games/' . ($anuncio['jogo_icone'] ?? 'default-game.png');
                     ?>
-                    <img src="<?php echo $img; ?>" alt="<?php echo sanitize($anuncio['titulo']); ?>">
-                    <?php if ($anuncio['destaque']): ?>
+                    <img src="<?php echo $img; ?>" alt="<?php echo sanitize($anuncio['titulo']); ?>"
+                         onerror="this.style.display='none'">
+                    <?php if (!empty($anuncio['destaque'])): ?>
                         <span class="product-badge">Destaque</span>
                     <?php endif; ?>
                 </div>
                 <div class="product-info">
                     <div class="product-game">
-                        <img src="/assets/img/games/<?php echo $anuncio['jogo_icone'] ?? 'default-game.png'; ?>" alt="" onerror="this.style.display='none'">
+                        <img src="/assets/img/games/<?php echo sanitize($anuncio['jogo_icone'] ?? 'default-game.png'); ?>" 
+                             alt="" onerror="this.style.display='none'">
                         <?php echo sanitize($anuncio['jogo_nome']); ?>
                     </div>
                     <h3 class="product-title"><?php echo sanitize($anuncio['titulo']); ?></h3>
@@ -181,12 +194,13 @@ $total_jogos = db_count('jogos', "ativo = 1");
     
     <div class="products-grid">
         <?php foreach ($creditos_populares as $credito): ?>
+        <?php $jogo_info = $jogos_por_id[$credito['jogo_id']] ?? null; ?>
         <div class="credit-card">
-            <img src="/assets/img/moedas/<?php echo $jogos[array_search($credito, $creditos_populares)]['moeda_icone'] ?? 'default.png'; ?>" 
+            <img src="/assets/img/moedas/<?php echo sanitize($credito['moeda_icone'] ?? 'default.png'); ?>" 
                  alt="<?php echo sanitize($credito['moeda_jogo']); ?>"
                  class="credit-icon"
-                 onerror="this.src='/assets/img/icons/coin-default.png'">
-            <div class="credit-game" style="color: var(--neon-green); font-size: 0.85rem; margin-bottom: 10px;">
+                 onerror="this.style.display='none'">
+            <div class="credit-game">
                 <?php echo sanitize($credito['jogo_nome']); ?>
             </div>
             <div class="credit-amount">
