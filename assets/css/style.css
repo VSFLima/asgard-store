@@ -1227,3 +1227,117 @@
         height: 60px;
     }
 }
+
+/* ============================================
+   Store Page Styles
+   ============================================
+
+/* Breadcrumb */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.breadcrumb a {
+    color: var(--text-secondary);
+}
+
+.breadcrumb a:hover {
+    color: var(--neon-green);
+}
+
+.breadcrumb i {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Store Header */
+.store-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.store-count {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Store Toolbar */
+.store-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.store-order {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.store-order label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.store-order .form-select {
+    width: auto;
+    min-width: 180px;
+    padding: 8px 15px;
+}
+
+/* Filter Count */
+.filter-count {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* Filter Actions */
+.filter-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Store Main */
+.store-main {
+    min-height: 500px;
+}
+
+/* Responsive Store */
+@media (max-width: 768px) {
+    .store-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .store-toolbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .store-order {
+        width: 100%;
+    }
+    
+    .store-order .form-select {
+        flex: 1;
+    }
+}
