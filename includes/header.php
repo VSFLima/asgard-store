@@ -19,6 +19,7 @@ $site_name = defined('SITE_NAME') ? SITE_NAME : 'Asgard Store';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?php echo defined('SITE_DESC') ? SITE_DESC : 'Marketplace de contas e creditos de jogos'; ?>">
     <title><?php echo isset($page_title) ? $page_title . ' | ' . $site_name : $site_name; ?></title>
+    <meta name="csrf-token" content="<?php echo generate_csrf_token(); ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
