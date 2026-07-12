@@ -1634,3 +1634,64 @@
         gap: 10px;
     }
 }
+
+/* ============================================
+   Social Media Styles
+   ============================================
+
+/* Seller Social Links */
+.seller-social {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.seller-social h4 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.seller-social h4 i {
+    color: var(--neon-green);
+    margin-right: 8px;
+}
+
+.seller-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    border-color: var(--btn-color, var(--neon-green));
+    color: var(--btn-color, var(--neon-green));
+    box-shadow: 0 0 15px color-mix(in srgb, var(--btn-color, var(--neon-green)) 30%, transparent);
+    text-decoration: none;
+}
+
+/* Footer Social Hover */
+.social-links a:hover {
+    color: var(--hover-color, var(--neon-green));
+    box-shadow: 0 0 15px color-mix(in srgb, var(--hover-color, var(--neon-green)) 30%, transparent);
+}
+
+/* Profile Social Section */
+.form-group .form-label .fab {
+    margin-right: 5px;
+}

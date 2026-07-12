@@ -432,3 +432,12 @@ INSERT INTO `configuracoes` (`chave`, `valor`, `descricao`) VALUES
 ('destaque_preco_14dias', '14.99', 'Preco do destaque por 14 dias'),
 ('destaque_preco_30dias', '19.99', 'Preco do destaque por 30 dias'),
 ('redes_sociais_ativas', '1', 'Mostrar redes sociais no site');
+
+-- Colunas de redes sociais do usuario
+ALTER TABLE `usuarios`
+  ADD COLUMN `telegram_link` VARCHAR(255) DEFAULT NULL AFTER `telegram`,
+  ADD COLUMN `whatsapp_link` VARCHAR(255) DEFAULT NULL AFTER `telefone`,
+  ADD COLUMN `tiktok_link` VARCHAR(255) DEFAULT NULL AFTER `telegram_link`,
+  ADD COLUMN `instagram_link` VARCHAR(255) DEFAULT NULL AFTER `tiktok_link`,
+  ADD COLUMN `youtube_link` VARCHAR(255) DEFAULT NULL AFTER `instagram_link`,
+  ADD COLUMN `discord_link` VARCHAR(255) DEFAULT NULL AFTER `youtube_link`;
