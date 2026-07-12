@@ -130,7 +130,7 @@
     // FAVORITES (AJAX)
     // ============================================
     function initFavorites() {
-        document.querySelectorAll('.product-favorite').forEach(function(btn) {
+        document.querySelectorAll('.product-favorite, .btn-favorite').forEach(function(btn) {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -384,6 +384,24 @@
         xhr.send(data ? JSON.stringify(data) : null);
     };
     window.validateEmail = function(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); };
+    
+    window.toggleFavorite = function(btn) {
+        var anuncioId = btn.dataset.id;
+        if (!anuncioId) return;
+        var isActive = btn.classList.contains('active');
+        ajaxRequest('/painel/api/favorito.php', 'POST', {
+            anuncio_id: anuncioId,
+            action: isActive ? 'remove' : 'add'
+        }, function(err, data) {
+            if (err || !data || !data.success) { showToast('Erro ao atualizar favorito', 'error'); return; }
+            btn.classList.toggle('active');
+            var icon = btn.querySelector('i');
+            icon.classList.toggle('far');
+            icon.classList.toggle('fas');
+            showToast(btn.classList.contains('active') ? 'Adicionado aos favoritos' : 'Removido dos favoritos', btn.classList.contains('active') ? 'success' : 'info');
+        });
+    };
+
     window.formatMoney = function(v) { return 'R$ ' + parseFloat(v).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); };
 
 })();
