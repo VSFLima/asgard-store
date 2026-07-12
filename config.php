@@ -1,6 +1,6 @@
 <?php
 /**
- * GameVault - Configuracoes Gerais
+ * Asgard Store - Configuracoes Gerais
  */
 
 // Modo debug

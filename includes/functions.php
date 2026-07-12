@@ -1,6 +1,6 @@
 <?php
 /**
- * GameVault - Funcoes Auxiliares
+ * Asgard Store - Funcoes Auxiliares
  * ========================================
  */
 

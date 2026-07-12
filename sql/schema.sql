@@ -1,5 +1,5 @@
 -- =============================================
--- GameVault - Database Schema
+-- Asgard Store - Database Schema
 -- Marketplace para compra e venda de contas
 -- =============================================
 
@@ -323,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `configuracoes` (
 
 -- Admin padrao (senha: admin123)
 INSERT INTO `usuarios` (`nome`, `sobrenome`, `email`, `senha`, `admin`, `status`) VALUES
-('Admin', 'GameVault', 'admin@asgard_store.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 'ativo');
+('Admin', 'Asgard Store', 'admin@asgard_store.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 'ativo');
 
 -- Configuracoes padrao
 INSERT INTO `configuracoes` (`chave`, `valor`, `descricao`) VALUES
@@ -333,7 +333,7 @@ INSERT INTO `configuracoes` (`chave`, `valor`, `descricao`) VALUES
 ('whatsapp_suporte', '', 'Numero do WhatsApp do suporte'),
 ('telegram_suporte', '', '@ do Telegram do suporte'),
 ('telegram_bot_token', '', 'Token do bot Telegram'),
-('site_nome', 'GameVault', 'Nome do site'),
+('site_nome', 'Asgard Store', 'Nome do site'),
 ('site_descricao', 'Marketplace de contas e creditos de jogos', 'Descricao do site');
 
 -- Jogos padrao

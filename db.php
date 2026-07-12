@@ -1,6 +1,6 @@
 <?php
 /**
- * GameVault - Conexao com Banco de Dados
+ * Asgard Store - Conexao com Banco de Dados
  */
 
 require_once __DIR__ . '/config.php';
