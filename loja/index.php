@@ -55,10 +55,10 @@ $total = db_fetch(
 
 // Ordenacao
 $order_map = [
-    'mais_recente' => 'a.criado_em DESC',
-    'menor_preco' => 'a.preco ASC',
-    'maior_preco' => 'a.preco DESC',
-    'mais_vistos' => 'a.visualizacoes DESC'
+    'mais_recente' => 'a.destaque DESC, a.criado_em DESC',
+    'menor_preco' => 'a.destaque DESC, a.preco ASC',
+    'maior_preco' => 'a.destaque DESC, a.preco DESC',
+    'mais_vistos' => 'a.destaque DESC, a.visualizacoes DESC'
 ];
 $order_sql = $order_map[$ordem] ?? 'a.criado_em DESC';
 
