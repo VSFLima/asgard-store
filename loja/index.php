@@ -53,14 +53,17 @@ $total = db_fetch(
     $params
 )['total'];
 
-// Ordenacao
+// Ordenacao - Prioridade: Admin > Destaque (pago) > Regular
+// u.admin = 1 (venda oficial) sempre no topo
+// a.destaque = 1 (destaque pago) depois
+// resto por ordem selecionada
 $order_map = [
-    'mais_recente' => 'a.destaque DESC, a.criado_em DESC',
-    'menor_preco' => 'a.destaque DESC, a.preco ASC',
-    'maior_preco' => 'a.destaque DESC, a.preco DESC',
-    'mais_vistos' => 'a.destaque DESC, a.visualizacoes DESC'
+    'mais_recente' => 'u.admin DESC, a.destaque DESC, a.criado_em DESC',
+    'menor_preco' => 'u.admin DESC, a.destaque DESC, a.preco ASC',
+    'maior_preco' => 'u.admin DESC, a.destaque DESC, a.preco DESC',
+    'mais_vistos' => 'u.admin DESC, a.destaque DESC, a.visualizacoes DESC'
 ];
-$order_sql = $order_map[$ordem] ?? 'a.criado_em DESC';
+$order_sql = $order_map[$ordem] ?? 'u.admin DESC, a.destaque DESC, a.criado_em DESC';
 
 // Paginacao
 $pagination = paginate($total, $per_page, $page);
@@ -193,8 +196,10 @@ require_once __DIR__ . '/../includes/header.php';
                             <img src="<?php echo $img; ?>" loading="lazy"
                                  alt="<?php echo sanitize($anuncio['titulo']); ?>"
                                  onerror="this.style.display='none'">
-                            <?php if (!empty($anuncio['destaque'])): ?>
-                                <span class="product-badge">Destaque</span>
+                            <?php if (!empty($anuncio['admin'])): ?>
+                                <span class="product-badge badge-admin"><?php echo $anuncio['usuario_id'] == 1 ? '💎' : '💠'; ?> Venda Oficial</span>
+                            <?php elseif (!empty($anuncio['destaque'])): ?>
+                                <span class="product-badge badge-destaque">⭐ Destaque</span>
                             <?php endif; ?>
                         </div>
                         <div class="product-info">
@@ -210,7 +215,11 @@ require_once __DIR__ . '/../includes/header.php';
                             </div>
                             <div class="product-footer">
                                 <div class="product-price"><?php echo format_money($anuncio['preco']); ?></div>
-                                <span class="btn btn-sm btn-primary">Ver</span>
+                                <?php if (!empty($anuncio['admin'])): ?>
+                                    <span class="btn btn-sm btn-green"><?php echo $anuncio['usuario_id'] == 1 ? '💎' : '💠'; ?> Ver</span>
+                                <?php else: ?>
+                                    <span class="btn btn-sm btn-primary">Ver</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </a>

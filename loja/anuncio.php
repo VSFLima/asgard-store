@@ -188,9 +188,17 @@ require_once __DIR__ . '/../includes/header.php';
                         <?php else: ?>
                             <i class="fas fa-user"></i>
                         <?php endif; ?>
+                        <?php if (!empty($anuncio['admin'])): ?>
+                            <span class="seller-diamond <?php echo $anuncio['vendedor_id'] == 1 ? 'diamond-red' : 'diamond-blue'; ?>">💎</span>
+                        <?php endif; ?>
                     </div>
                     <div class="seller-info">
-                        <h4><?php echo sanitize($anuncio['vendedor_nome'] . ' ' . $anuncio['vendedor_sobrenome']); ?></h4>
+                        <h4>
+                            <?php echo sanitize($anuncio['vendedor_nome'] . ' ' . $anuncio['vendedor_sobrenome']); ?>
+                            <?php if (!empty($anuncio['admin'])): ?>
+                                <span class="seller-badge-admin"><?php echo $anuncio['vendedor_id'] == 1 ? '💎' : '💠'; ?> Venda Oficial</span>
+                            <?php endif; ?>
+                        </h4>
                         <div class="seller-stats">
                             <span><i class="fas fa-star" style="color: var(--neon-yellow);"></i> <?php echo number_format($anuncio['vendedor_nota'] ?? 0, 1); ?></span>
                             <span><i class="fas fa-shopping-bag"></i> <?php echo $anuncio['vendedor_vendas']; ?> vendas</span>
