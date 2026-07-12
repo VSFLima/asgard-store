@@ -236,12 +236,5 @@ require_once __DIR__ . '/../includes/header.php';
     <?php endif; ?>
 </div>
 
-<script>
-function changeImage(thumb, src) {
-    document.getElementById('main-image').src = src;
-    document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
-    thumb.classList.add('active');
-}
-</script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
