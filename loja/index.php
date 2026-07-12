@@ -71,7 +71,7 @@ $pagination = paginate($total, $per_page, $page);
 // Buscar anuncios
 $anuncios = db_fetch_all(
     "SELECT a.*, j.nome as jogo_nome, j.icone as jogo_icone, j.slug as jogo_slug,
-            u.nome as vendedor_nome, u.nota_media
+            u.nome as vendedor_nome, u.nota_media, u.admin as admin
      FROM anuncios a
      JOIN jogos j ON a.jogo_id = j.id
      JOIN usuarios u ON a.usuario_id = u.id

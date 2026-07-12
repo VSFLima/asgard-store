@@ -16,7 +16,8 @@ $anuncio = db_fetch(
     "SELECT a.*, j.nome as jogo_nome, j.slug as jogo_slug, j.icone as jogo_icone, j.moeda_nome,
             u.id as vendedor_id, u.nome as vendedor_nome, u.sobrenome as vendedor_sobrenome,
             u.nota_media as vendedor_nota, u.total_vendas as vendedor_vendas,
-            u.avatar as vendedor_avatar, u.criado_em as vendedor_desde
+            u.avatar as vendedor_avatar, u.criado_em as vendedor_desde,
+            u.admin as admin
      FROM anuncios a
      JOIN jogos j ON a.jogo_id = j.id
      JOIN usuarios u ON a.usuario_id = u.id
