@@ -28,6 +28,16 @@ function csrf_field(): string {
     return '<input type="hidden" name="csrf_token" value="' . generate_csrf_token() . '">';
 }
 
+// Validar CSRF em requisicoes POST
+function require_csrf(): void {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!validate_csrf_token($_POST[CSRF_TOKEN_NAME] ?? '')) {
+            http_response_code(403);
+            die('Token CSRF invalido.');
+        }
+    }
+}
+
 // Hash de senha
 function hash_password(string $password): string {
     return password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
