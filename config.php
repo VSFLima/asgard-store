@@ -3,8 +3,13 @@
  * Asgard Store - Configuracoes Gerais
  */
 
+// Carregar config local (nao commitada)
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require_once __DIR__ . '/config.local.php';
+}
+
 // Modo debug
-if (!defined('DEBUG_MODE')) define('DEBUG_MODE', false);
+if (!defined('DEBUG_MODE')) define('DEBUG_MODE', true);
 
 if (DEBUG_MODE) {
     error_reporting(E_ALL);
@@ -29,15 +34,15 @@ if (!defined('UPLOADS_ANUNCIOS')) define('UPLOADS_ANUNCIOS', UPLOADS_PATH . 'anu
 if (!defined('UPLOADS_AVATARES')) define('UPLOADS_AVATARES', UPLOADS_PATH . 'avatares/');
 
 // URLs
-if (!defined('SITE_URL')) define('SITE_URL', 'https://Asgard-Store.gamer.free');
+if (!defined('SITE_URL')) define('SITE_URL', 'https://asgard.store');
 if (!defined('SITE_NAME')) define('SITE_NAME', 'Asgard Store');
 if (!defined('SITE_DESC')) define('SITE_DESC', 'Asgard Store - Marketplace de contas e creditos de jogos');
 
 // Banco de dados
-if (!defined('DB_HOST')) define('DB_HOST', 'sql211.infinityfree.com');
-if (!defined('DB_NAME')) define('DB_NAME', 'asgardstore');
-if (!defined('DB_USER')) define('DB_USER', 'if0_42253950');
-if (!defined('DB_PASS')) define('DB_PASS', 'wkUZhoqtJpKUY7Z');
+if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
+if (!defined('DB_NAME')) define('DB_NAME', 'asgard_store');
+if (!defined('DB_USER')) define('DB_USER', 'root');
+if (!defined('DB_PASS')) define('DB_PASS', '');
 
 // Seguranca
 if (!defined('CSRF_TOKEN_NAME')) define('CSRF_TOKEN_NAME', 'csrf_token');
