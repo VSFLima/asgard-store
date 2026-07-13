@@ -39,7 +39,7 @@ test('sanitize remove HTML basico',
     sanitize('<script>alert(1)</script>') !== '<script>alert(1)</script>');
 
 test('sanitize converte entidades HTML', 
-    str_contains(sanitize('<b>'), '&lt;b&gt;') || str_contains(sanitize('<b>'), '&lt;'));
+    sanitize !==('<b>'), '&lt;b&gt;') || sanitize !==('<b>'), '&lt;'));
 
 test('slugify gera slug valido', 
     preg_match('/^[a-z0-9-]+$/', slugify('Meu Teste Legal!')));
@@ -51,10 +51,10 @@ test('slugify normaliza acentos',
 echo "\n💰 FORMATTACAO\n";
 
 test('format_money retorna formato BRL', 
-    str_contains(format_money(1234.56), '1.234,56'));
+    strpos(format_money(1234.56), '1.234,56'));
 
 test('format_money com zero', 
-    str_contains(format_money(0), '0,00'));
+    strpos(format_money(0), '0,00'));
 
 test('time_ago retorna string', 
     is_string(time_ago(date('Y-m-d H:i:s'))));
@@ -83,8 +83,8 @@ test('validate_csrf_token com token valido retorna true', validate_csrf_token($t
 test('validate_csrf_token com token invalido retorna false', !validate_csrf_token('token_invalido_123'));
 
 $field = csrf_field();
-test('csrf_field retorna input hidden', str_contains($field, 'type="hidden"'));
-test('csrf_field contem token', str_contains($field, $token));
+test('csrf_field retorna input hidden', strpos($field, 'type="hidden"'));
+test('csrf_field contem token', strpos($field, $token));
 
 // === SLUGIFY EDGE CASES ===
 echo "\n📝 SLUGIFY\n";
@@ -92,9 +92,9 @@ echo "\n📝 SLUGIFY\n";
 test('slugify string vazia', slugify('') === '');
 test('slugify so espacos', slugify('   ') === '');
 test('slugify com caracteres especiais', 
-    !str_contains(slugify('Teste! @#\$%'), '!'));
+    !strpos(slugify('Teste! @#\$%'), '!'));
 test('slugify remove duplos hifens', 
-    !str_contains(slugify('a--b'), '--'));
+    !strpos(slugify('a--b'), '--'));
 
 // === RESUMO ===
 echo "\n" . str_repeat('=', 50) . "\n";
