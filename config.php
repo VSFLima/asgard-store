@@ -34,10 +34,10 @@ if (!defined('SITE_NAME')) define('SITE_NAME', 'Asgard Store');
 if (!defined('SITE_DESC')) define('SITE_DESC', 'Asgard Store - Marketplace de contas e creditos de jogos');
 
 // Banco de dados
-if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
-if (!defined('DB_NAME')) define('DB_NAME', 'asgard_store');
-if (!defined('DB_USER')) define('DB_USER', 'root');
-if (!defined('DB_PASS')) define('DB_PASS', '');
+if (!defined('DB_HOST')) define('DB_HOST', 'sql211.infinityfree.com');
+if (!defined('DB_NAME')) define('DB_NAME', 'asgardstore');
+if (!defined('DB_USER')) define('DB_USER', 'if0_42253950');
+if (!defined('DB_PASS')) define('DB_PASS', 'wkUZhoqtJpKUY7Z');
 
 // Seguranca
 if (!defined('CSRF_TOKEN_NAME')) define('CSRF_TOKEN_NAME', 'csrf_token');
