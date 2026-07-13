@@ -201,20 +201,23 @@ require_once __DIR__ . '/../includes/header.php';
                     </tr>
                 </thead>
                 <tbody>
+                    <?php
+                    $status_labels = [
+                        'aguardando_pagamento' => ['Aguardando PG', 'var(--neon-yellow)'],
+                        'pagamento_confirmado' => ['PG Confirmado', 'var(--neon-blue)'],
+                        'em_entrega' => ['Em Entrega', 'var(--neon-purple)'],
+                        'concluido' => ['Concluido', 'var(--neon-green)'],
+                        'cancelado' => ['Cancelado', 'var(--neon-pink)'],
+                        'disputa' => ['Em Disputa', 'var(--neon-pink)'],
+                        'pendente' => ['Pendente', 'var(--neon-yellow)'],
+                    ];
+                    ?>
                     <?php foreach ($ultimas_vendas as $v): ?>
                     <tr style="border-bottom: 1px solid var(--border-color);">
                         <td style="padding: 10px; color: var(--text);"><?php echo sanitize($v['anuncio_titulo']); ?></td>
                         <td style="padding: 10px; color: var(--text-muted);"><?php echo sanitize($v['comprador_nome']); ?></td>
                         <td style="padding: 10px;">
                             <?php
-                            $status_labels = [
-                                'aguardando_pagamento' => ['Aguardando PG', 'var(--neon-yellow)'],
-                                'pagamento_confirmado' => ['PG Confirmado', 'var(--neon-blue)'],
-                                'em_entrega' => ['Em Entrega', 'var(--neon-purple)'],
-                                'concluido' => ['Concluido', 'var(--neon-green)'],
-                                'cancelado' => ['Cancelado', 'var(--neon-pink)'],
-                                'disputa' => ['Em Disputa', 'var(--neon-pink)'],
-                            ];
                             $label = $status_labels[$v['status']] ?? ['Desconhecido', 'var(--text-muted)'];
                             ?>
                             <span style="color: <?php echo $label[1]; ?>; font-size: 0.85rem; font-weight: 600;">

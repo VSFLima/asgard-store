@@ -28,6 +28,13 @@ function csrf_field(): string {
     return '<input type="hidden" name="csrf_token" value="' . generate_csrf_token() . '">';
 }
 
+// Deletar registro
+function db_delete(string $table, string $where, array $params = []): bool {
+    $table = preg_replace('/[^a-z0-9_]/i', '', $table);
+    $sql = "DELETE FROM `{$table}` WHERE {$where}";
+    return db_query($sql, $params)->rowCount() > 0;
+}
+
 // Validar CSRF em requisicoes POST
 function require_csrf(): void {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
