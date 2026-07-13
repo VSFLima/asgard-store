@@ -4,7 +4,7 @@
  */
 
 // Modo debug
-if (!defined('DEBUG_MODE')) define('DEBUG_MODE', true);
+if (!defined('DEBUG_MODE')) define('DEBUG_MODE', false);
 
 if (DEBUG_MODE) {
     error_reporting(E_ALL);
@@ -29,7 +29,7 @@ if (!defined('UPLOADS_ANUNCIOS')) define('UPLOADS_ANUNCIOS', UPLOADS_PATH . 'anu
 if (!defined('UPLOADS_AVATARES')) define('UPLOADS_AVATARES', UPLOADS_PATH . 'avatares/');
 
 // URLs
-if (!defined('SITE_URL')) define('SITE_URL', 'https://asgard.store');
+if (!defined('SITE_URL')) define('SITE_URL', 'https://Asgard-Store.gamer.free');
 if (!defined('SITE_NAME')) define('SITE_NAME', 'Asgard Store');
 if (!defined('SITE_DESC')) define('SITE_DESC', 'Asgard Store - Marketplace de contas e creditos de jogos');
 
