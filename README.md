@@ -17,7 +17,7 @@ Plataforma fullstack com painel administrativo, sistema de usuarios, chat por co
 
 ### Compras
 - 💰 Pagamento via PIX e Criptomoeda
-- 🔒 Garantia de <?php echo GARANTIA_HORAS; ?> horas
+- 🔒 Garantia de 24 horas
 - ⚖️ Sistema de disputas com intermediacao
 - 💬 Chat por compra entre comprador e vendedor
 - ✅ Confirmacao de recebimento
