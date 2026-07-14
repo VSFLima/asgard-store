@@ -6,8 +6,8 @@
 
 # Credenciais InfinityFree
 FTP_HOST="ftpupload.net"
-FTP_USER="if0_42401203"
-FTP_PASS="70PU5Trtox6"
+FTP_USER="${FTP_USER:-if0_42401203}"
+FTP_PASS="${FTP_PASS:-}"
 FTP_DIR="/htdocs"
 
 # Verificar se lftp esta instalado

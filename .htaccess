@@ -1,10 +1,19 @@
 RewriteEngine On
 DirectoryIndex index.php index.html
 
-# Protect sensitive files
-<FilesMatch "^(config\.php|db\.php)$">
+<FilesMatch "^(config\.php|config\.local\.php|db\.php)$">
     Require all denied
 </FilesMatch>
 
-# Deny access to sensitive directories
 RewriteRule ^(sql|tests|backups|builds|scripts)/ - [F,L]
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+</IfModule>

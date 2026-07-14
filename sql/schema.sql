@@ -325,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `configuracoes` (
 
 -- Admin padrao (senha: admin123)
 INSERT INTO `usuarios` (`nome`, `sobrenome`, `email`, `senha`, `admin`, `status`) VALUES
-('Admin', 'Asgard Store', 'admin@asgard_store.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 'ativo');
+('Admin', 'Asgard Store', 'admin@asgard.store', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 'ativo');
 
 -- Configuracoes padrao
 INSERT INTO `configuracoes` (`chave`, `valor`, `descricao`) VALUES
