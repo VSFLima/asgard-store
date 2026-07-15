@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'criar')
             'descricao' => "Credito criado: {$nome}",
             'tipo' => 'creditos',
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Pacote de creditos criado!'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Pacote de creditos criado!'];
         header('Location: ' . SITE_URL . '/admin/creditos.php');
         exit;
     }
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'deletar
             'descricao' => "Credito #{$id} excluido",
             'tipo' => 'creditos',
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Pacote excluido!'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Pacote excluido!'];
     }
     header('Location: ' . SITE_URL . '/admin/creditos.php');
     exit;

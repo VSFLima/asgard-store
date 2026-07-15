@@ -86,8 +86,7 @@ if ($text === '/status') {
 
 // Funcao auxiliar para enviar mensagem
 function sendTelegramMessage(array $data): void {
-    $bot_token = 'SEU_BOT_TOKEN_AQUI'; // Configurar
-    $url = "https://api.telegram.org/bot{$bot_token}/sendMessage";
+    $url = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN . "/sendMessage";
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_POST => true,

@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'tipo' => 'config',
     ]);
 
-    $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Configuracoes salvas com sucesso!'];
+    $_SESSION['flash'] = ['type' => 'success', 'message' => 'Configuracoes salvas com sucesso!'];
     header('Location: ' . SITE_URL . '/admin/config.php');
     exit;
 }

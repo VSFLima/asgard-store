@@ -173,7 +173,7 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="form-group">
             <label class="checkbox-label">
                 <input type="checkbox" name="termos" value="1" <?php echo isset($_POST['termos']) ? 'checked' : ''; ?> required>
-                <span>Concordo com os <a href="/pages/termos/">Termos de Uso</a> e <a href="/pages/privacidade/">Politica de Privacidade</a></span>
+                <span>Concordo com os <a href="/pages/termos.php">Termos de Uso</a> e <a href="/pages/privacidade.php">Politica de Privacidade</a></span>
             </label>
         </div>
         

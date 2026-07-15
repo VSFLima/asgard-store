@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'criar')
             'descricao' => "Categoria criada: {$nome}",
             'tipo' => 'categorias',
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Categoria criada!'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Categoria criada!'];
         header('Location: ' . SITE_URL . '/admin/categorias.php');
         exit;
     }
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'deletar
             'descricao' => "Categoria #{$id} excluida",
             'tipo' => 'categorias',
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Categoria excluida!'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Categoria excluida!'];
     }
     header('Location: ' . SITE_URL . '/admin/categorias.php');
     exit;

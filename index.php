@@ -68,7 +68,7 @@ $total_jogos = db_count('jogos', "ativo = 1");
             <a href="/creditos/" class="btn btn-green btn-lg">
                 <i class="fas fa-coins"></i> Comprar Creditos
             </a>
-            <a href="/pages/como-vender/" class="btn btn-outline btn-lg">
+            <a href="/pages/como-vender.php" class="btn btn-outline btn-lg">
                 <i class="fas fa-hand-holding-dollar"></i> Comecar a Vender
             </a>
         </div>

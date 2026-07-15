@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $anuncio_id = db_insert('anuncios', $data);
 
             if ($anuncio_id) {
-                $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Anuncio criado com sucesso! Aguardando aprovacao.'];
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anuncio criado com sucesso! Aguardando aprovacao.'];
                 header('Location: ' . SITE_URL . '/painel/anuncios.php');
                 exit;
             } else {

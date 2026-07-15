@@ -38,7 +38,10 @@ function db_delete(string $table, string $where, array $params = []): bool {
 // Validar CSRF em requisicoes POST
 function require_csrf(): void {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!validate_csrf_token($_POST[CSRF_TOKEN_NAME] ?? '')) {
+        // Requisicoes normais (formularios) mandam o token em $_POST.
+        // Requisicoes AJAX (ajaxRequest, corpo em JSON) mandam no header X-CSRF-Token.
+        $token = $_POST[CSRF_TOKEN_NAME] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if (!validate_csrf_token($token)) {
             http_response_code(403);
             die('Token CSRF invalido.');
         }
@@ -55,9 +58,9 @@ function verify_password(string $password, string $hash): bool {
     return password_verify($password, $hash);
 }
 
-// Sanitizar输入
-function sanitize(string $input): string {
-    return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+// Sanitizar entrada
+function sanitize(?string $input): string {
+    return htmlspecialchars(trim($input ?? ''), ENT_QUOTES, 'UTF-8');
 }
 
 // Gerar slug

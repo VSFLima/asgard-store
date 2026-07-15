@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Verificar assinatura (simplificado - em producao usar HMAC)
 $secret = $_SERVER['HTTP_X_WEBHOOK_SECRET'] ?? '';
-if ($secret !== 'asgard_store_webhook_secret_2026') {
+if (!hash_equals(WEBHOOK_SECRET, $secret)) {
     json_error('Assinatura invalida', 403);
 }
 
@@ -56,12 +56,17 @@ create_notification(
     '/painel/vendas.php'
 );
 
-// Log
-db_insert('admin_log', [
-    'admin_id' => 0,
-    'acao' => 'webhook_pagamento',
-    'descricao' => "Pagamento confirmado via webhook - Compra #{$compra_id}",
-    'tipo' => 'financeiro',
-]);
+// Log (best-effort - admin_log exige um admin_id valido, entao nao deixamos
+// uma falha aqui derrubar a resposta de sucesso do webhook)
+try {
+    db_insert('admin_log', [
+        'admin_id' => $compra['vendedor_id'],
+        'acao' => 'webhook_pagamento',
+        'descricao' => "Pagamento confirmado via webhook - Compra #{$compra_id}",
+        'tipo' => 'financeiro',
+    ]);
+} catch (Throwable $e) {
+    // Nao interrompe o fluxo do webhook por causa do log
+}
 
 json_success(['compra_id' => $compra_id, 'status' => 'pagamento_confirmado'], 'Pagamento confirmado');

@@ -165,7 +165,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div class="store-toolbar">
                 <div class="store-order">
                     <label>Ordenar por:</label>
-                    <select onchange="window.location='?<?php echo http_build_query(array_merge($_GET, ['ordem' => '']); ?>&ordem='+this.value)" class="form-select">
+                    <select onchange="window.location='?<?php echo http_build_query(array_merge($_GET, ['ordem' => ''])); ?>&ordem='+this.value" class="form-select">
                         <option value="mais_recente" <?php echo $ordem === 'mais_recente' ? 'selected' : ''; ?>>Mais Recente</option>
                         <option value="menor_preco" <?php echo $ordem === 'menor_preco' ? 'selected' : ''; ?>>Menor Preco</option>
                         <option value="maior_preco" <?php echo $ordem === 'maior_preco' ? 'selected' : ''; ?>>Maior Preco</option>

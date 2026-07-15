@@ -29,10 +29,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 case 'confirmar_conclusao':
                     if (in_array($compra['status'], ['entregando', 'entregue'])) {
-                        db_query("UPDATE compras SET confirmado_vendedor = 1, status = 'concluido' WHERE id = ?", [$compra_id]);
-                        // Creditar vendedor
-                        db_query("UPDATE usuarios SET saldo = saldo + ?, total_vendas = total_vendas + 1 WHERE id = ?", [$compra['valor_vendedor'], $user_id]);
-                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Venda concluida! Valor creditado no seu saldo.'];
+                        $stmt = db_query(
+                            "UPDATE compras SET confirmado_vendedor = 1, status = 'concluido' WHERE id = ? AND status IN ('entregando', 'entregue')",
+                            [$compra_id]
+                        );
+                        if ($stmt->rowCount() > 0) {
+                            // Creditar vendedor
+                            db_query("UPDATE usuarios SET saldo = saldo + ?, total_vendas = total_vendas + 1 WHERE id = ?", [$compra['valor_vendedor'], $user_id]);
+                            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Venda concluida! Valor creditado no seu saldo.'];
+                        }
                     }
                     break;
             }

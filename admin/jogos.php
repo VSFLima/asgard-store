@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'criar')
             'descricao' => "Jogo criado: {$nome}",
             'tipo' => 'jogos',
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Jogo criado com sucesso!'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Jogo criado com sucesso!'];
         header('Location: ' . SITE_URL . '/admin/jogos.php');
         exit;
     }
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar'
             'descricao' => "Jogo #{$id} atualizado",
             'tipo' => 'jogos',
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Jogo atualizado!'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Jogo atualizado!'];
         header('Location: ' . SITE_URL . '/admin/jogos.php');
         exit;
     }
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'deletar
                 'descricao' => "Jogo #{$id} excluido",
                 'tipo' => 'jogos',
             ]);
-            $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Jogo excluido!'];
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Jogo excluido!'];
         }
         header('Location: ' . SITE_URL . '/admin/jogos.php');
         exit;

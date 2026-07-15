@@ -12,14 +12,32 @@ $user_id = $_SESSION['user_id'];
 $success = '';
 $error = '';
 
+// Filtro opcional por jogo (vindo de /creditos/?jogo=slug)
+$jogo_slug = trim($_GET['jogo'] ?? '');
+$jogo_filtro = null;
+if ($jogo_slug !== '') {
+    $jogo_filtro = db_fetch("SELECT * FROM jogos WHERE slug = ?", [$jogo_slug]);
+}
+
 // Buscar pacotes ativos
-$creditos = db_fetch_all(
-    "SELECT c.*, j.nome as jogo_nome, j.icone as jogo_icone 
-     FROM creditos c 
-     JOIN jogos j ON c.jogo_id = j.id 
-     WHERE c.ativo = 1 AND c.estoque > 0 
-     ORDER BY j.ordem ASC, c.ordem ASC"
-);
+if ($jogo_filtro) {
+    $creditos = db_fetch_all(
+        "SELECT c.*, j.nome as jogo_nome, j.icone as jogo_icone 
+         FROM creditos c 
+         JOIN jogos j ON c.jogo_id = j.id 
+         WHERE c.ativo = 1 AND c.estoque > 0 AND c.jogo_id = ?
+         ORDER BY c.ordem ASC",
+        [$jogo_filtro['id']]
+    );
+} else {
+    $creditos = db_fetch_all(
+        "SELECT c.*, j.nome as jogo_nome, j.icone as jogo_icone 
+         FROM creditos c 
+         JOIN jogos j ON c.jogo_id = j.id 
+         WHERE c.ativo = 1 AND c.estoque > 0 
+         ORDER BY j.ordem ASC, c.ordem ASC"
+    );
+}
 
 // Processar compra
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -63,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 create_notification($admin['id'], 'Nova Compra de Creditos', "Compra #{$compra_id} - {$credito['nome']} x{$quantidade} - R$ " . number_format($valor_total, 2, ',', '.'), 'compra', '/admin/compras.php');
             }
 
-            $_SESSION['flash'] = ['tipo' => 'success', 'msg' => "Compra realizada! Seu codigo: {$codigo}"];
+            $_SESSION['flash'] = ['type' => 'success', 'message' => "Compra realizada! Seu codigo: {$codigo}"];
             header('Location: ' . SITE_URL . '/creditos/?compra=' . $compra_id);
             exit;
         } else {
@@ -103,7 +121,8 @@ require_once __DIR__ . '/../includes/header.php';
 
 <div class="container" style="padding-top: 30px; padding-bottom: 60px;">
     <h1 class="section-title" style="text-align: center; margin-bottom: 10px;">
-        <i class="fas fa-coins" style="color: var(--neon-green);"></i> Comprar Creditos
+        <i class="fas fa-coins" style="color: var(--neon-green);"></i>
+        <?php echo $jogo_filtro ? 'Creditos de ' . sanitize($jogo_filtro['nome']) : 'Comprar Creditos'; ?>
     </h1>
     <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
         Compre creditos para seus jogos favoritos com seguranca.

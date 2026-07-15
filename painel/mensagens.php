@@ -28,7 +28,7 @@ $compra = db_fetch(
 );
 
 if (!$compra) {
-    $_SESSION['flash'] = ['tipo' => 'error', 'msg' => 'Compra nao encontrada.'];
+    $_SESSION['flash'] = ['type' => 'error', 'message' => 'Compra nao encontrada.'];
     header('Location: ' . SITE_URL . '/painel/compras.php');
     exit;
 }

@@ -118,3 +118,11 @@ function db_insert(string $table, array $data) {
     $result = Database::getInstance()->insert($table, $data);
     return $result > 0 ? $result : false;
 }
+
+function db_count(string $table, string $where = '1=1', array $params = []): int {
+    return Database::getInstance()->count($table, $where, $params);
+}
+
+function db_update(string $table, array $data, string $where, array $whereParams = []): int {
+    return Database::getInstance()->update($table, $data, $where, $whereParams);
+}

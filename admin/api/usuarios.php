@@ -74,7 +74,7 @@ switch ($acao) {
     case 'resetar_senha':
         $nova_senha = bin2hex(random_bytes(6));
         $hash = hash_password($nova_senha);
-        db_update('usuarios', ['senha' => $hash, 'senha_temporaria' => $nova_senha], 'id = ?', [$user_id]);
+        db_update('usuarios', ['senha' => $hash, 'senha_temporaria' => 1], 'id = ?', [$user_id]);
         db_insert('admin_log', [
             'admin_id' => $admin_id,
             'acao' => 'resetar_senha',

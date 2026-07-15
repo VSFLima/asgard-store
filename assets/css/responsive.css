@@ -51,6 +51,30 @@
         display: block;
     }
     
+    /* Exibe o menu mobile quando o JS adiciona a classe .show (clique no hamburguer) */
+    .navbar .container {
+        position: relative;
+    }
+    
+    .nav-links.show,
+    .nav-search.show,
+    .nav-user.show {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        order: 10;
+    }
+    
+    .nav-links.show {
+        gap: 10px;
+        padding: 15px 0;
+    }
+    
+    .nav-user.show {
+        gap: 10px;
+        padding: 0 0 15px;
+    }
+    
     .hero-title {
         font-size: 2rem;
     }

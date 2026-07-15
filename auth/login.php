@@ -104,8 +104,8 @@ require_once __DIR__ . '/../includes/header.php';
     
     <p class="auth-footer">
         Ao entrar, voce concorda com nossos 
-        <a href="/pages/termos/">Termos de Uso</a> e 
-        <a href="/pages/privacidade/">Politica de Privacidade</a>.
+        <a href="/pages/termos.php">Termos de Uso</a> e 
+        <a href="/pages/privacidade.php">Politica de Privacidade</a>.
     </p>
 </div>
 

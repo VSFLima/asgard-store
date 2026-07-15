@@ -19,12 +19,14 @@ if (DEBUG_MODE) {
     ini_set('display_errors', 0);
 }
 
-// Seguranca de sessao
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_strict_mode', 1);
-ini_set('session.cookie_samesite', 'Lax');
-// Descomentar quando HTTPS estiver ativo:
-// ini_set('session.cookie_secure', 1);
+// Seguranca de sessao (so pode ser configurado antes da sessao iniciar)
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.use_strict_mode', 1);
+    ini_set('session.cookie_samesite', 'Lax');
+    // Descomentar quando HTTPS estiver ativo:
+    // ini_set('session.cookie_secure', 1);
+}
 
 // Diretorios
 if (!defined('ROOT_PATH')) define('ROOT_PATH', __DIR__ . '/');
@@ -55,6 +57,13 @@ if (!defined('MAX_SCREENSHOTS')) define('MAX_SCREENSHOTS', 5);
 
 // Comissao
 if (!defined('COMISSAO_PADRAO')) define('COMISSAO_PADRAO', 10);
+
+// Bot do Telegram - configure com o token real gerado pelo @BotFather
+if (!defined('TELEGRAM_BOT_TOKEN')) define('TELEGRAM_BOT_TOKEN', 'SEU_BOT_TOKEN_AQUI');
+if (!defined('TELEGRAM_BOT_USERNAME')) define('TELEGRAM_BOT_USERNAME', 'AsgardStoreBot');
+
+// Segredo usado para validar webhooks de pagamento (troque por um valor proprio e secreto)
+if (!defined('WEBHOOK_SECRET')) define('WEBHOOK_SECRET', 'asgard_store_webhook_secret_2026');
 if (!defined('MINIMO_SAQUE')) define('MINIMO_SAQUE', 30);
 if (!defined('GARANTIA_HORAS')) define('GARANTIA_HORAS', 24);
 

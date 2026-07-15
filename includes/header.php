@@ -36,7 +36,7 @@ $site_name = defined('SITE_NAME') ? SITE_NAME : 'Asgard Store';
             </div>
             <div class="top-bar-right">
                 <a href="/suporte/"><i class="fas fa-headset"></i> Suporte</a>
-                <a href="/pages/como-vender/"><i class="fas fa-question-circle"></i> Como Vender</a>
+                <a href="/pages/como-vender.php"><i class="fas fa-question-circle"></i> Como Vender</a>
             </div>
         </div>
     </div>
@@ -52,11 +52,11 @@ $site_name = defined('SITE_NAME') ? SITE_NAME : 'Asgard Store';
             <div class="nav-links">
                 <a href="/loja/" class="nav-link"><i class="fas fa-store"></i> Loja</a>
                 <a href="/creditos/" class="nav-link"><i class="fas fa-coins"></i> Creditos</a>
-                <a href="/pages/como-vender/" class="nav-link"><i class="fas fa-hand-holding-dollar"></i> Vender</a>
+                <a href="/pages/como-vender.php" class="nav-link"><i class="fas fa-hand-holding-dollar"></i> Vender</a>
             </div>
 
             <div class="nav-search">
-                <form action="/loja/busca.php" method="GET">
+                <form action="/loja/" method="GET">
                     <input type="text" name="q" placeholder="Buscar contas, jogos..." class="search-input">
                     <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
                 </form>
@@ -103,8 +103,8 @@ $site_name = defined('SITE_NAME') ? SITE_NAME : 'Asgard Store';
     </nav>
 
     <!-- Flash Messages -->
-    <?php if (isset($_SESSION['flash'])): ?>
-        <div class="flash-message flash-<?php echo $_SESSION['flash']['type']; ?>">
+    <?php if (!empty($_SESSION['flash']['message'])): ?>
+        <div class="flash-message flash-<?php echo sanitize($_SESSION['flash']['type'] ?? 'info'); ?>">
             <div class="container">
                 <span><?php echo sanitize($_SESSION['flash']['message']); ?></span>
                 <button class="flash-close" onclick="this.parentElement.parentElement.remove()">&times;</button>

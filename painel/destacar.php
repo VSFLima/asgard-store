@@ -17,7 +17,7 @@ $anuncio = db_fetch(
 );
 
 if (!$anuncio) {
-    $_SESSION['flash'] = ['type' => 'error', 'message' => 'Anuncio nao encontrado.');
+    $_SESSION['flash'] = ['type' => 'error', 'message' => 'Anuncio nao encontrado.'];
     header('Location: /painel/anuncios.php');
     exit;
 }
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$destaque_ativo) {
             $error = 'Saldo insuficiente. Voce tem ' . format_money($user['saldo']);
         } else {
             // Debitar saldo
-db_query("UPDATE usuarios SET saldo = saldo - ? WHERE id = ? AND saldo >= ?", [$valor, $user_id, $valor]);], 'id = ?', [$user_id]);
+            db_query("UPDATE usuarios SET saldo = saldo - ? WHERE id = ? AND saldo >= ?", [$valor, $user_id, $valor]);
             
             // Criar destaque
             $data_fim = date('Y-m-d H:i:s', strtotime("+{$duracao} days"));
@@ -110,7 +110,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <div style="color: var(--neon-green); font-size: 0.85rem; font-weight: 600;">
                     <?php echo sanitize($anuncio['jogo_nome']); ?>
                 </div>
-                <h3 style="margin: 5px 0;">"><?php echo sanitize($anuncio['titulo']); ?></h3>
+                <h3 style="margin: 5px 0;"><?php echo sanitize($anuncio['titulo']); ?></h3>
                 <div style="color: var(--neon-green); font-weight: 700;">
                     <?php echo format_money($anuncio['preco']); ?>
                 </div>

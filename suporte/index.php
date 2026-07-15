@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     create_notification($admin['id'], 'Novo Ticket de Suporte', "Ticket #{$ticket_id}: {$assunto}", 'suporte', '/admin/suporte.php');
                 }
 
-                $_SESSION['flash'] = ['tipo' => 'success', 'msg' => "Ticket #{$ticket_id} criado com sucesso!"];
+                $_SESSION['flash'] = ['type' => 'success', 'message' => "Ticket #{$ticket_id} criado com sucesso!"];
                 header('Location: ' . SITE_URL . '/suporte/ticket.php?id=' . $ticket_id);
                 exit;
             } else {

@@ -22,10 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($acao) {
                 case 'confirmar_recebimento':
                     if (in_array($compra['status'], ['entregando', 'entregue'])) {
-                        db_query("UPDATE compras SET confirmado_comprador = 1, status = 'concluido' WHERE id = ?", [$compra_id]);
-                        // Creditar vendedor
-                        db_query("UPDATE usuarios SET saldo = saldo + ?, total_vendas = total_vendas + 1 WHERE id = ?", [$compra['valor_vendedor'], $compra['vendedor_id']]);
-                        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Recebimento confirmado! O vendedor foi creditado.'];
+                        $stmt = db_query(
+                            "UPDATE compras SET confirmado_comprador = 1, status = 'concluido' WHERE id = ? AND status IN ('entregando', 'entregue')",
+                            [$compra_id]
+                        );
+                        if ($stmt->rowCount() > 0) {
+                            // Creditar vendedor
+                            db_query("UPDATE usuarios SET saldo = saldo + ?, total_vendas = total_vendas + 1 WHERE id = ?", [$compra['valor_vendedor'], $compra['vendedor_id']]);
+                            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Recebimento confirmado! O vendedor foi creditado.'];
+                        }
                     }
                     break;
 

@@ -26,14 +26,14 @@ $ticket = db_fetch(
 );
 
 if (!$ticket) {
-    $_SESSION['flash'] = ['tipo' => 'error', 'msg' => 'Ticket nao encontrado.'];
+    $_SESSION['flash'] = ['type' => 'error', 'message' => 'Ticket nao encontrado.'];
     header('Location: ' . SITE_URL . '/suporte/listar.php');
     exit;
 }
 
 // Verificar permissao: proprio usuario ou admin
 if ($ticket['usuario_id'] != $user_id && !$is_admin) {
-    $_SESSION['flash'] = ['tipo' => 'error', 'msg' => 'Acesso negado.'];
+    $_SESSION['flash'] = ['type' => 'error', 'message' => 'Acesso negado.'];
     header('Location: ' . SITE_URL . '/suporte/listar.php');
     exit;
 }
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($acao === 'fechar' && $ticket['usuario_id'] == $user_id) {
         db_update('suporte_tickets', ['status' => 'resolvido'], 'id = ?', [$ticket_id]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Ticket fechado.'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Ticket fechado.'];
     } elseif ($acao === 'status' && $is_admin) {
         $novo_status = $_POST['novo_status'] ?? '';
         if (in_array($novo_status, ['aberto', 'em_andamento', 'resolvido'])) {

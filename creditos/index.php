@@ -53,7 +53,7 @@ require_once __DIR__ . '/../includes/header.php';
     <?php else: ?>
     <div class="credits-grid">
         <?php foreach ($jogos_com_creditos as $jogo): ?>
-        <a href="/creditos/jogo.php?jogo=<?php echo $jogo['slug']; ?>" class="credit-game-card">
+        <a href="/creditos/comprar.php?jogo=<?php echo $jogo['slug']; ?>" class="credit-game-card">
             <div class="credit-game-icon">
                 <img src="/assets/img/games/<?php echo sanitize($jogo['icone'] ?? 'default-game.png'); ?>" 
                      alt="<?php echo sanitize($jogo['nome']); ?>"

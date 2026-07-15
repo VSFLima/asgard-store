@@ -79,11 +79,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $dados_saque['wallet_crypto'] = $wallet_crypto;
         }
 
-        // Debitar saldo e criar saque em transacao
-        db_query("UPDATE usuarios SET saldo = saldo - ? WHERE id = ? AND saldo >= ?", [$valor, $user_id, $valor]);
-        db_insert('saques', $dados_saque);
+        // Debitar saldo e criar saque, apenas se o debito realmente afetar uma linha
+        $stmt = db_query("UPDATE usuarios SET saldo = saldo - ? WHERE id = ? AND saldo >= ?", [$valor, $user_id, $valor]);
 
-        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Solicitacao de saque enviada com sucesso!'];
+        if ($stmt->rowCount() > 0) {
+            db_insert('saques', $dados_saque);
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Solicitacao de saque enviada com sucesso!'];
+        } else {
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Saldo insuficiente!'];
+        }
         header('Location: /painel/saldo.php');
         exit;
     }

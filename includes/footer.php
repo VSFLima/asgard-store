@@ -23,6 +23,7 @@ $redes = db_fetch_all("SELECT * FROM redes_sociais WHERE ativo = 1 ORDER BY orde
                             <i class="<?php echo sanitize($rede['icone']); ?>"></i>
                         </a>
                         <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -30,8 +31,8 @@ $redes = db_fetch_all("SELECT * FROM redes_sociais WHERE ativo = 1 ORDER BY orde
                     <ul>
                         <li><a href="/loja/">Loja de Contas</a></li>
                         <li><a href="/creditos/">Loja de Creditos</a></li>
-                        <li><a href="/pages/como-vender/">Como Vender</a></li>
-                        <li><a href="/pages/faq/">FAQ</a></li>
+                        <li><a href="/pages/como-vender.php">Como Vender</a></li>
+                        <li><a href="/pages/faq.php">FAQ</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -47,9 +48,9 @@ $redes = db_fetch_all("SELECT * FROM redes_sociais WHERE ativo = 1 ORDER BY orde
                     <h4>Suporte</h4>
                     <ul>
                         <li><a href="/suporte/"><i class="fas fa-headset"></i> Central de Ajuda</a></li>
-                        <li><a href="/pages/termos/">Termos de Uso</a></li>
-                        <li><a href="/pages/privacidade/">Politica de Privacidade</a></li>
-                        <li><a href="/pages/contato/">Contato</a></li>
+                        <li><a href="/pages/termos.php">Termos de Uso</a></li>
+                        <li><a href="/pages/privacidade.php">Politica de Privacidade</a></li>
+                        <li><a href="/pages/contato.php">Contato</a></li>
                     </ul>
                 </div>
             </div>

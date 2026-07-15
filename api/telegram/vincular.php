@@ -18,13 +18,33 @@ if (empty($user['telegram_link'])) {
     $user['telegram_link'] = $token;
 }
 
-$telegram_configured = !empty($bot_token) && $bot_token !== 'SEU_BOT_TOKEN_AQUI';
-$telegram_url = $telegram_configured 
-    ? "https://t.me/" . "AsgardStoreBot" . "?start=" . $user['telegram_link']
+$telegram_configured = TELEGRAM_BOT_TOKEN !== 'SEU_BOT_TOKEN_AQUI';
+$telegram_url = $telegram_configured
+    ? "https://t.me/" . TELEGRAM_BOT_USERNAME . "?start=" . $user['telegram_link']
     : '#';
 
 // Verificar se ja esta vinculado
 $vinculado = db_fetch("SELECT * FROM telegram_users WHERE usuario_id = ? AND ativo = 1", [$user_id]);
+
+// Salvar preferencias de notificacao
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_csrf();
+
+    if ($vinculado) {
+        db_update('telegram_users', [
+            'notificar_compras' => isset($_POST['notificar_compras']) ? 1 : 0,
+            'notificar_vendas' => isset($_POST['notificar_vendas']) ? 1 : 0,
+            'notificar_saque' => isset($_POST['notificar_saque']) ? 1 : 0,
+        ], 'usuario_id = ?', [$user_id]);
+        $vinculado = db_fetch("SELECT * FROM telegram_users WHERE usuario_id = ? AND ativo = 1", [$user_id]);
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Preferencias de notificacao salvas!'];
+    } else {
+        $_SESSION['flash'] = ['type' => 'error', 'message' => 'Vincule sua conta ao Telegram antes de configurar as notificacoes.'];
+    }
+
+    header('Location: ' . SITE_URL . '/api/telegram/vincular.php');
+    exit;
+}
 
 require_once __DIR__ . '/../../includes/header.php';
 ?>

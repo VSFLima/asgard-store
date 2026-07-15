@@ -11,9 +11,10 @@ if (!is_logged_in()) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    require_csrf();
     json_error('Método não permitido.', 405);
 }
+
+require_csrf();
 
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {

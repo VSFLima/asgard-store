@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cancela
             'descricao' => "Destaque premium #{$id} cancelado",
             'tipo' => 'destaques',
         ]);
-        $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Destaque cancelado!'];
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Destaque cancelado!'];
     }
     header('Location: ' . SITE_URL . '/admin/destaques.php');
     exit;

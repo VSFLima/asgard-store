@@ -22,7 +22,7 @@ $anuncio = db_fetch(
 );
 
 if (!$anuncio) {
-    $_SESSION['flash'] = ['tipo' => 'error', 'msg' => 'Anuncio nao encontrado ou nao pode ser editado.'];
+    $_SESSION['flash'] = ['type' => 'error', 'message' => 'Anuncio nao encontrado ou nao pode ser editado.'];
     header('Location: ' . SITE_URL . '/painel/anuncios.php');
     exit;
 }
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updated = db_update('anuncios', $data, 'id = ?', [$anuncio_id]);
 
         if ($updated) {
-            $_SESSION['flash'] = ['tipo' => 'success', 'msg' => 'Anuncio atualizado com sucesso! Aguardando nova aprovacao.'];
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Anuncio atualizado com sucesso! Aguardando nova aprovacao.'];
             header('Location: ' . SITE_URL . '/painel/anuncios.php');
             exit;
         } else {
